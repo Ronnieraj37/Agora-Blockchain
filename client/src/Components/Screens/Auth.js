@@ -7,7 +7,30 @@ import { CONTRACTADDRESS } from '../constants'
 import { Navigate } from "react-router-dom";
 import CryptoJS from 'crypto-js';
 
+import {
+  Chain,
+  ConnectButton,
+  useAccount,
+  useConnectKit,
+  useParticleTheme,
+  useSwitchChains,
+  useParticleProvider,
+} from '@particle-network/connect-react-ui';
+import '@particle-network/connect-react-ui/dist/index.css';
+
+
+
 function Auth() {
+
+  const account = useAccount();
+  const connectKit = useConnectKit();
+  const { theme, setTheme } = useParticleTheme();
+
+  const provider = useParticleProvider();
+
+  const { isSwtichChain, renderChains } = useSwitchChains();
+
+
   const [authMode, setAuthMode] = useState("signup");
   const [registered, setRegistered] = useState(false);
   const [fullName, setFullName] = useState({
@@ -97,10 +120,10 @@ function Auth() {
 
   const isRegistered = async () => {
     try {
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
+
+      const ethersProvider = new ethers.providers.Web3Provider(provider, "any");
+      if (ethersProvider) {
+        const signer = ethersProvider.getSigner();
         const contract = new ethers.Contract(
           contractAddress,
           Authentication.abi,
@@ -125,6 +148,22 @@ function Auth() {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const chainChanged = async (chain) => {
+      console.log('DEMO-onChainChanged', chain);
+    }
+    if (connectKit) {
+      connectKit.on('connect', (provider) => {
+        console.log("PRovider", provider);
+        isRegistered();
+      });
+      connectKit.on('chainChanged', chainChanged);
+      return () => {
+        connectKit.removeListener('chainChanged', chainChanged);
+      };
+    }
+  }, [connectKit]);
 
   useEffect(() => {
     isRegistered();
@@ -204,7 +243,7 @@ function Auth() {
                   </div>
               }
             </form>
-
+            <ConnectButton />
             <br />
 
             {/* <font
