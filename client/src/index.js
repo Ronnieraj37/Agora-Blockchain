@@ -42,7 +42,7 @@ ReactDOM.render(
         showQrModal: false
       }),
     }}
-    theme={'auto'}
+    theme={'light'}
     language={'en'}   //optional：localize, default en
     walletSort={['Particle Auth', 'Wallet']} //optional：walelt order
     particleAuthSort={[    //optional：display particle auth items and order

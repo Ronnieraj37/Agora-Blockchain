@@ -18,8 +18,6 @@ import {
 } from '@particle-network/connect-react-ui';
 import '@particle-network/connect-react-ui/dist/index.css';
 
-
-
 function Auth() {
 
   const account = useAccount();
@@ -118,7 +116,7 @@ function Auth() {
     }
   }
 
-  const isRegistered = async () => {
+  const isRegistered = async (provider) => {
     try {
 
       const ethersProvider = new ethers.providers.Web3Provider(provider, "any");
@@ -156,7 +154,7 @@ function Auth() {
     if (connectKit) {
       connectKit.on('connect', (provider) => {
         console.log("PRovider", provider);
-        isRegistered();
+        isRegistered(provider);
       });
       connectKit.on('chainChanged', chainChanged);
       return () => {
@@ -243,8 +241,8 @@ function Auth() {
                   </div>
               }
             </form>
-            <ConnectButton />
             <br />
+            <ConnectButton />
 
             {/* <font
 			  className="text-muted centered signInOption"
