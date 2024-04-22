@@ -28,7 +28,7 @@ require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 module.exports = {
   solidity: '0.8.10',
-  defaultNetwork: "mumbai",
+  defaultNetwork: "sepolia",
   paths: {
     artifacts: "../client/src/artifacts"
   },
@@ -36,7 +36,7 @@ module.exports = {
     hardhat: {
       allowUnlimitedContractSize: true
     },
-    mumbai: {
+    sepolia: {
       allowUnlimitedContractSize: true,
       url: process.env.RPC_URL,
       accounts: [process.env.PRIVATE_KEY],
