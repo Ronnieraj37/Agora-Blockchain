@@ -73,7 +73,9 @@ contract ElectionFactory {
         Election _election;
         address diamond = LibDiamond.addressStorage().diamond;
         GetBallot(diamond).getNewBallot(_ballotType);
-        GetResultCalculator(diamond).getNewResultCalculator(_ballotType);
+        GetResultCalculator(diamond).getNewResultCalculator(
+            _resultCalculatorType
+        );
         LibDiamond.ElectionStorage memory es = LibDiamond.electionStorage();
         _election = new Election(
             _electionInfo,
