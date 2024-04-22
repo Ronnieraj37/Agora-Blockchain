@@ -2,19 +2,18 @@
 pragma solidity >=0.8.0;
 
 //Import ResultCalculators
-import './votingApp/resultCalculator/ResultCalculator.sol';
-import './votingApp/resultCalculator/GeneralResults.sol';
-import './votingApp/resultCalculator/Oklahoma.sol';
-import './votingApp/resultCalculator/BordaResult.sol';
-import './votingApp/resultCalculator/SchulzeResult.sol';
-import './votingApp/resultCalculator/IRVResult.sol';
-import './votingApp/resultCalculator/KemenyYoungResult.sol';
+import "./votingApp/resultCalculator/ResultCalculator.sol";
+import "./votingApp/resultCalculator/GeneralResults.sol";
+import "./votingApp/resultCalculator/Oklahoma.sol";
+import "./votingApp/resultCalculator/BordaResult.sol";
+import "./votingApp/resultCalculator/SchulzeResult.sol";
+import "./votingApp/resultCalculator/IRVResult.sol";
+import "./votingApp/resultCalculator/KemenyYoungResult.sol";
 // New ResultCalculators here
 
-import '../libraries/LibDiamond.sol';
+import "../libraries/LibDiamond.sol";
 
 contract GetResultCalculator {
-
     // ------------------------------------------------------------------------------------------------------
     //                                          DEPENDENCIES
     // ------------------------------------------------------------------------------------------------------
@@ -72,14 +71,11 @@ contract GetResultCalculator {
         // }
         else if (_ballotType == 4) {
             _resultCalculator = new BordaResult();
-        }
-        else if (_ballotType == 5) {
+        } else if (_ballotType == 5) {
             _resultCalculator = new SchulzeResult();
-        }
-        else if (_ballotType == 4) {
+        } else if (_ballotType == 4) {
             _resultCalculator = new IRVResult();
-        }
-        else if (_ballotType == 4) {
+        } else if (_ballotType == 4) {
             _resultCalculator = new KemenyYoungResult();
         }
         // New Ballots here

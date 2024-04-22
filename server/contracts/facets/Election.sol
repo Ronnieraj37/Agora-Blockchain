@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.8.0;
 
-import './votingApp/ballot/Ballot.sol';
-import './votingApp/resultCalculator/ResultCalculator.sol';
+import "./votingApp/ballot/Ballot.sol";
+import "./votingApp/resultCalculator/ResultCalculator.sol";
 import "./Authentication.sol";
 
 contract Election {
-
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE
     // ------------------------------------------------------------------------------------------------------
@@ -29,7 +28,7 @@ contract Election {
     }
     Candidate[] candidates;
     uint[] winners;
-    mapping(uint=>Candidate)candidateWithID;
+    mapping(uint => Candidate) candidateWithID;
     uint candidateCount;
 
     address electionOrganizer;
@@ -38,7 +37,6 @@ contract Election {
     uint voterCount;
 
     uint ballotType;
-
 
     enum Status {
         active,
@@ -68,21 +66,34 @@ contract Election {
     // ------------------------------------------------------------------------------------------------------
 
     modifier onlyOrganizerContract() {
-        require(msg.sender == electionOrganizerContract,"Must be called from the election organizer contract");
+        require(
+            msg.sender == electionOrganizerContract,
+            "Must be called from the election organizer contract"
+        );
         _;
     }
 
     modifier onlyOrganizer() {
-        require(msg.sender == electionOrganizer,"Caller must be the election organizer");
+        require(
+            msg.sender == electionOrganizer,
+            "Caller must be the election organizer"
+        );
         _;
     }
-
 
     // ------------------------------------------------------------------------------------------------------
     //                                            CONSTRUCTOR
     // ------------------------------------------------------------------------------------------------------
 
-    constructor(ElectionInfo memory _electionInfo,Ballot _ballot,ResultCalculator _resultCalculator,address _electionOrganizer,address _electionOrganizerContract,uint _ballotType,address _authentication) {
+    constructor(
+        ElectionInfo memory _electionInfo,
+        Ballot _ballot,
+        ResultCalculator _resultCalculator,
+        address _electionOrganizer,
+        address _electionOrganizerContract,
+        uint _ballotType,
+        address _authentication
+    ) {
         electionOrganizer = _electionOrganizer;
         electionOrganizerContract = _electionOrganizerContract;
         electionInfo = _electionInfo;
@@ -109,37 +120,31 @@ contract Election {
     }
 
     function getStatus() public view returns (Status) {
-        
-        if(block.timestamp < electionInfo.startDate) {
+        if (block.timestamp < electionInfo.startDate) {
             return Status.pending;
-        } 
-        
-        else if(block.timestamp < electionInfo.endDate) {
+        } else if (block.timestamp < electionInfo.endDate) {
             return Status.active;
-        } 
-        
-        else {
+        } else {
             return Status.closed;
         }
     }
 
-
     // Authentication
     // function isAuthenticated(Voter _voter) public returns(bool){}
 
-    function getBallot() public onlyOrganizer view returns(address) {
+    function getBallot() public view onlyOrganizer returns (address) {
         return address(ballot);
     }
 
-    function getResultCalculator() public onlyOrganizer view returns(address) {
+    function getResultCalculator() public view onlyOrganizer returns (address) {
         return address(resultCalculator);
     }
 
-    function getElectionInfo() public view returns(ElectionInfo memory){
+    function getElectionInfo() public view returns (ElectionInfo memory) {
         return electionInfo;
     }
 
-    function getElectionType() public view returns(bool){
+    function getElectionType() public view returns (bool) {
         return electionInfo.electionType;
     }
 
@@ -148,18 +153,23 @@ contract Election {
     }
 
     //Add candidate to election as well as ballot
-    function addCandidate(Candidate memory _candidate) external onlyOrganizerContract {
-        require(getStatus() == Status.pending,"Cannot add candidates after election has started");
+    function addCandidate(
+        Candidate memory _candidate
+    ) external onlyOrganizerContract {
+        require(
+            getStatus() == Status.pending,
+            "Cannot add candidates after election has started"
+        );
         uint id = candidateCount + 1;
         _candidate.candidateID = id;
         candidates.push(_candidate);
         ballot.addCandidate(_candidate.candidateID);
-        candidateWithID[_candidate.candidateID]=_candidate;
+        candidateWithID[_candidate.candidateID] = _candidate;
         candidateCount++;
-        emit CandidateAdded(address(this),address(ballot),_candidate);
+        emit CandidateAdded(address(this), address(ballot), _candidate);
     }
 
-    function getCandidateCount() public view returns(uint) {
+    function getCandidateCount() public view returns (uint) {
         return candidateCount;
     }
 
@@ -167,21 +177,23 @@ contract Election {
         return candidates;
     }
 
-    function getCandidateByID(uint _candidateID) public view returns (Candidate memory) {
+    function getCandidateByID(
+        uint _candidateID
+    ) public view returns (Candidate memory) {
         return candidateWithID[_candidateID];
     }
 
-    function getVoterCount() external view returns(uint){
+    function getVoterCount() external view returns (uint) {
         return voterCount;
     }
 
-    function getVoteStatus(address _voter) external view returns(bool){
+    function getVoteStatus(address _voter) external view returns (bool) {
         return ballot.getVoteStatus(_voter);
     }
 
     // only after election ends
-    function getWinners() public view returns(uint[] memory) {
-        require(resultDeclared == true,"Results aren't declared yet");
+    function getWinners() public view returns (uint[] memory) {
+        require(resultDeclared == true, "Results aren't declared yet");
         return winners;
     }
 
@@ -190,7 +202,11 @@ contract Election {
         In invite based elections, a condidition to check if voter is authenticated
 
     */
-    function vote(uint _candidateID,uint weight,uint[] memory voteArr) external {
+    function vote(
+        uint _candidateID,
+        uint weight,
+        uint[] memory voteArr
+    ) external {
         // require(getStatus() == Status.active,"Election needs to be active to vote");
         require(getUserStatusForVote(msg.sender), "User Not Authenticated");
         // if (electionInfo.electionType==0) {
@@ -204,31 +220,44 @@ contract Election {
     // function getTimeStamps()public;
     //                  ->this can be depracated, since time stamps are easily available from ElectionInfo
 
-    
-    function getResult() external returns(uint[] memory){
-        require(getStatus() == Status.closed, "Results are declared only after the election ends");
+    function getResult() external returns (uint[] memory) {
+        require(
+            getStatus() == Status.closed,
+            "Results are declared only after the election ends"
+        );
         if (resultDeclared == false) {
             winners = resultCalculator.getResult(ballot, voterCount);
             resultDeclared = true;
             emit ListWinners(winners);
             return winners;
-        }
-        else {
+        } else {
             return getWinners();
         }
     }
 
-    function getBallotType() external view returns(uint){
+    function getBallotType() external view returns (uint) {
         return ballotType;
     }
 
-    function updateElectionInfo(ElectionInfo memory _electionInfo) external  onlyOrganizer{
-        require(getStatus() == Status.pending, "Cannot update election info after election has started");
+    function updateElectionInfo(
+        ElectionInfo memory _electionInfo
+    ) external onlyOrganizer {
+        require(
+            getStatus() == Status.pending,
+            "Cannot update election info after election has started"
+        );
         electionInfo = _electionInfo;
     }
 
-    function updateCandidateInfo(string memory _name, string memory _description, uint index) external onlyOrganizerContract {
-        require(getStatus() == Status.pending,"Cannot add candidates after election has started");
+    function updateCandidateInfo(
+        string memory _name,
+        string memory _description,
+        uint index
+    ) external onlyOrganizerContract {
+        require(
+            getStatus() == Status.pending,
+            "Cannot add candidates after election has started"
+        );
         uint len = candidates.length;
         require(index < len, "Candidate not found");
         candidates[index].name = _name;

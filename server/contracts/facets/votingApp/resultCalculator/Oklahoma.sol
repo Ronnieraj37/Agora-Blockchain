@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.8.0;
 
-import './ResultCalculator.sol';
-import '../ballot/Ballot.sol';
+import "./ResultCalculator.sol";
+import "../ballot/Ballot.sol";
 
 contract Oklahoma is ResultCalculator {
-
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE
     // ------------------------------------------------------------------------------------------------------
-    
+
     // candidate id to vote count
-    mapping (uint => uint) votesOfCandidate;
+    mapping(uint => uint) votesOfCandidate;
     uint[] winners;
     uint[] candidates;
     uint candidateCount;
@@ -27,7 +26,10 @@ contract Oklahoma is ResultCalculator {
     //                                            FUNCTIONS
     // ------------------------------------------------------------------------------------------------------
 
-    function getResult(Ballot _ballot, uint _voterCount) external override returns(uint[] memory) {
+    function getResult(
+        Ballot _ballot,
+        uint _voterCount
+    ) external override returns (uint[] memory) {
         // uint[] memory canididates = _ballot.getCandidates();
         winners = new uint[](0);
         ballot = _ballot;
@@ -42,7 +44,7 @@ contract Oklahoma is ResultCalculator {
         for (preference = 1; preference < candidateCount; preference++) {
             updateVotes(preference);
             leading = getLeadingCandidate();
-            if (votesOfCandidate[leading]>requiredMajority) {
+            if (votesOfCandidate[leading] > requiredMajority) {
                 break;
             }
         }
@@ -51,16 +53,15 @@ contract Oklahoma is ResultCalculator {
     }
 
     function updateVotes(uint _preference) internal {
-
         uint i;
         uint voteCount;
         for (i = 0; i < candidateCount; i++) {
-            voteCount = ballot.getVoteCount(candidates[i],_preference);
+            voteCount = ballot.getVoteCount(candidates[i], _preference);
             votesOfCandidate[candidates[i]] += voteCount / _preference;
-        }   
+        }
     }
 
-    function getLeadingCandidate() internal view returns(uint){
+    function getLeadingCandidate() internal view returns (uint) {
         uint i;
         uint voteCount;
         uint max;
@@ -74,6 +75,4 @@ contract Oklahoma is ResultCalculator {
         }
         return leading;
     }
-
-
 }

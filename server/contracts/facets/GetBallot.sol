@@ -1,21 +1,19 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.8.0;
 
-
 // Import Ballots
-import './votingApp/ballot/Ballot.sol';
-import './votingApp/ballot/GeneralBallot.sol';
-import './votingApp/ballot/PreferenceBallot.sol';
-import './votingApp/ballot/BordaBallot.sol';
-import './votingApp/ballot/Schulze.sol';
-import './votingApp/ballot/InstantRunOff.sol';
-import './votingApp/ballot/KemenyYoung.sol';
+import "./votingApp/ballot/Ballot.sol";
+import "./votingApp/ballot/GeneralBallot.sol";
+import "./votingApp/ballot/PreferenceBallot.sol";
+import "./votingApp/ballot/BordaBallot.sol";
+import "./votingApp/ballot/Schulze.sol";
+import "./votingApp/ballot/InstantRunOff.sol";
+import "./votingApp/ballot/KemenyYoung.sol";
 //New Ballot
 
-import '../libraries/LibDiamond.sol';
+import "../libraries/LibDiamond.sol";
 
 contract GetBallot {
-
     // ------------------------------------------------------------------------------------------------------
     //                                          DEPENDENCIES
     // ------------------------------------------------------------------------------------------------------
@@ -64,7 +62,6 @@ contract GetBallot {
     //                                            FUNCTIONS
     // ------------------------------------------------------------------------------------------------------
 
-
     function getNewBallot(uint _ballotType) external {
         /*
             1: GenralBallot
@@ -75,23 +72,17 @@ contract GetBallot {
         */
         if (_ballotType == 1) {
             _ballot = new GeneralBallot();
-        }
-        else if (_ballotType == 2) {
+        } else if (_ballotType == 2) {
             _ballot = new PreferenceBallot();
-        }
-        else if (_ballotType == 3) {
+        } else if (_ballotType == 3) {
             // ballot = new ScoreBallot();
-        }
-        else if (_ballotType == 4) {
+        } else if (_ballotType == 4) {
             _ballot = new BordaBallot();
-        }
-        else if (_ballotType == 5) {
+        } else if (_ballotType == 5) {
             _ballot = new SchulzeBallot();
-        }
-        else if (_ballotType == 6) {
+        } else if (_ballotType == 6) {
             _ballot = new IRV();
-        }
-        else if (_ballotType == 7) {
+        } else if (_ballotType == 7) {
             _ballot = new KemenyYoung();
         }
         // New Ballots here
