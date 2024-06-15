@@ -39,6 +39,10 @@ abstract contract Ballot {
         return candidates;
     }
 
+    function getCandidateCount() external view returns (uint) {
+        return candidates.length;
+    }
+
     function getVoteStatus(address _voter) external view returns (bool) {
         return voteStatus[_voter];
     }
@@ -60,5 +64,6 @@ abstract contract Ballot {
         uint _candidate,
         uint _weight
     ) external view virtual returns (uint);
+
     function getVoteArr() external virtual returns (uint[][] memory votes);
 }

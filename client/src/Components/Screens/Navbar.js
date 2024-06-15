@@ -22,7 +22,7 @@ function Navbar({ header, infoText, pictureUrl, address }) {
     }
 
     const logout = async () => {
-        localStorage.setItem(address, null);
+        localStorage.setItem(address);
         setTimeout(async () => {
             const redirect = async () => {
                 closeModal();

@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "./Ballot.sol";
 import "../../Election.sol";
 
+//ranking ballot
 contract IRV is Ballot {
     uint[][] Votes;
 
@@ -27,8 +28,7 @@ contract IRV is Ballot {
         _candidate;
         return uint(1);
     }
-    function getVoteArr() external pure override returns (uint[][] memory) {
-        uint[][] memory arr;
-        return arr;
+    function getVoteArr() external view override returns (uint[][] memory) {
+        return Votes;
     }
 }

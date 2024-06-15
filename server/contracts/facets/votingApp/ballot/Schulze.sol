@@ -4,6 +4,7 @@ pragma solidity >=0.8.0;
 import "./Ballot.sol";
 import "../../Election.sol";
 
+//ranked voting
 contract SchulzeBallot is Ballot {
     uint[][] votes;
 

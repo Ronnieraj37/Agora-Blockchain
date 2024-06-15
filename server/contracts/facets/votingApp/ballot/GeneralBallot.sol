@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "./Ballot.sol";
 import "../../Election.sol";
 
+//normal voting per candidate
 contract GeneralBallot is Ballot {
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE
@@ -21,7 +22,6 @@ contract GeneralBallot is Ballot {
         uint _weight,
         uint[] memory voteArr
     ) external override onlyOrganizerContract {
-        _weight = 1;
         require(voteStatus[_voter] == false, "Voter already voted");
         votes[_candidate] += 1;
         voteStatus[_voter] = true;
@@ -31,12 +31,8 @@ contract GeneralBallot is Ballot {
         uint _candidate,
         uint _weight
     ) external view override returns (uint) {
-        _weight = 1;
         return votes[_candidate];
     }
 
-    function getVoteArr() external override returns (uint[][] memory) {
-        uint[][] memory arr;
-        return arr;
-    }
+    function getVoteArr() external override returns (uint[][] memory arr) {}
 }

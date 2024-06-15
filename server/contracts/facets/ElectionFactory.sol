@@ -5,7 +5,8 @@ import "./Election.sol";
 import "./votingApp/ballot/Ballot.sol";
 import "./votingApp/resultCalculator/ResultCalculator.sol";
 import "../libraries/LibDiamond.sol";
-import "./GetBallot.sol";
+import "./GetBallot1.sol";
+import "./GetBallot2.sol";
 import "./GetResultCalculator.sol";
 
 contract ElectionFactory {
@@ -72,7 +73,8 @@ contract ElectionFactory {
     ) external {
         Election _election;
         address diamond = LibDiamond.addressStorage().diamond;
-        GetBallot(diamond).getNewBallot(_ballotType);
+        if (_ballotType < 5) GetBallot1(diamond).getNewBallot1(_ballotType);
+        else GetBallot2(diamond).getNewBallot2(_ballotType);
         GetResultCalculator(diamond).getNewResultCalculator(
             _resultCalculatorType
         );

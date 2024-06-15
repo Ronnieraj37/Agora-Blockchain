@@ -3,31 +3,36 @@
 require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 module.exports = {
-  solidity: '0.8.10',
-  defaultNetwork: "sepolia",
+  solidity: "0.8.10",
+  defaultNetwork: "hardhat",
   paths: {
-    artifacts: "../client/src/artifacts"
+    artifacts: "../client/src/artifacts",
   },
   networks: {
     hardhat: {
-      allowUnlimitedContractSize: true
+      allowUnlimitedContractSize: true,
     },
     sepolia: {
       allowUnlimitedContractSize: true,
-      url: process.env.RPC_URL,
+      url: process.env.RPC_URL_SEPOLIA,
       accounts: [process.env.PRIVATE_KEY],
-    }
+    },
+    amoy: {
+      allowUnlimitedContractSize: true,
+      url: process.env.RPC_URL_AMOY,
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
   mocha: {
-    timeout: 100000000
+    timeout: 100000000,
   },
   settings: {
     optimizer: {
-      enabled: true
-    }
+      enabled: true,
+      runs: 200,
+    },
   },
   contractSizer: {
-    runOnCompile: true
-  }
+    runOnCompile: true,
+  },
 };
-

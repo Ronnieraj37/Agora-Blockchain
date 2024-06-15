@@ -7,7 +7,7 @@ import "../../Election.sol";
     Each voter gives preferences to, or ranks the candidates.
     Each vote has a weight - the preference
 */
-
+//completely same as ranked but implementation has some problem instead use mine
 contract PreferenceBallot is Ballot {
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE

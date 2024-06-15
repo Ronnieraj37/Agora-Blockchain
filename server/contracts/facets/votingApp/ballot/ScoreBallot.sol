@@ -8,7 +8,7 @@ Voters can vote for 1 or more candidates (even all).
 Each vote is a score in a given range - set when the contract is created
 
 */
-
+//similar to ranked but range voting
 contract ScoreBallot is Ballot {
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE

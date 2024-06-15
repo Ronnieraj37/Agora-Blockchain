@@ -9,6 +9,7 @@ import "./votingApp/resultCalculator/BordaResult.sol";
 import "./votingApp/resultCalculator/SchulzeResult.sol";
 import "./votingApp/resultCalculator/IRVResult.sol";
 import "./votingApp/resultCalculator/KemenyYoungResult.sol";
+import "./votingApp/resultCalculator/RankedQuadraticResults.sol";
 // New ResultCalculators here
 
 import "../libraries/LibDiamond.sol";
@@ -77,6 +78,8 @@ contract GetResultCalculator {
             _resultCalculator = new IRVResult();
         } else if (_ballotType == 4) {
             _resultCalculator = new KemenyYoungResult();
+        } else if (_ballotType == 8 || _ballotType == 9) {
+            _resultCalculator = new RankedQuadraticResults();
         }
         // New Ballots here
         else {

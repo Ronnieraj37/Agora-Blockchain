@@ -7,7 +7,7 @@ import "../../Election.sol";
     Each voter gives preferences to, or ranks the candidates.
     Each vote has a weight - the preference
 */
-
+//same as ranked
 contract BordaBallot is Ballot {
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE

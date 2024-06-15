@@ -103,8 +103,6 @@ contract Election {
         //     status = Status.pending; // } else {
         //     status = Status.active;
         // }
-        candidateCount = 1000;
-        voterCount = 0;
         resultDeclared = false;
         ballotType = _ballotType;
         authentication = Authentication(_authentication);
@@ -156,10 +154,10 @@ contract Election {
     function addCandidate(
         Candidate memory _candidate
     ) external onlyOrganizerContract {
-        require(
-            getStatus() == Status.pending,
-            "Cannot add candidates after election has started"
-        );
+        // require(
+        //     getStatus() == Status.pending,
+        //     "Cannot add candidates after election has started"
+        // );
         uint id = candidateCount + 1;
         _candidate.candidateID = id;
         candidates.push(_candidate);
@@ -203,11 +201,15 @@ contract Election {
 
     */
     function vote(
+        uint voter,
         uint _candidateID,
         uint weight,
         uint[] memory voteArr
     ) external {
-        // require(getStatus() == Status.active,"Election needs to be active to vote");
+        require(
+            getStatus() == Status.active,
+            "Election needs to be active to vote"
+        );
         require(getUserStatusForVote(msg.sender), "User Not Authenticated");
         // if (electionInfo.electionType==0) {
         //     require(isAuthenticated(msg.Sender),"Voter must be authenticated to cast vote");

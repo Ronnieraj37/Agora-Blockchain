@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "./Ballot.sol";
 import "../../Election.sol";
 
+//ranking ballot
 contract KemenyYoung is Ballot {
     // ------------------------------------------------------------------------------------------------------
     //                                              STATE

@@ -17,7 +17,6 @@ contract Authentication {
 
     // Tells if a user is authenticated or not;
     mapping(address => bool) userAuthStatus;
-    mapping(address => mapping(string => bool)) isloggedIn;
 
     // ------------------------------------------------------------------------------------------------------
     //                                          DEPENDENCIES
@@ -45,8 +44,7 @@ contract Authentication {
     }
 
     function createUser(
-        ElectionOrganizer.OrganizerInfo memory _organizerInfo,
-        string memory hashedPassword
+        ElectionOrganizer.OrganizerInfo memory _organizerInfo
     ) public {
         require(
             getAuthStatus(_organizerInfo.publicAddress) == false,
@@ -54,7 +52,6 @@ contract Authentication {
         );
         userAuthStatus[_organizerInfo.publicAddress] = true;
         electionOrganizer.addElectionOrganizer(_organizerInfo);
-        isloggedIn[_organizerInfo.publicAddress][hashedPassword] = true;
     }
 
     function getElectionOrganizerContract() public view returns (address) {
@@ -63,20 +60,5 @@ contract Authentication {
 
     function getAuthStatus(address _user) public view returns (bool) {
         return userAuthStatus[_user];
-    }
-
-    function getLoggedInStatus(
-        address _user,
-        string memory hashedPassword
-    ) public view returns (bool) {
-        return isloggedIn[_user][hashedPassword];
-    }
-
-    function getElectionOrganizer()
-        public
-        view
-        returns (ElectionOrganizer.OrganizerInfo[] memory)
-    {
-        return electionOrganizer.getElectionOrganizers();
     }
 }

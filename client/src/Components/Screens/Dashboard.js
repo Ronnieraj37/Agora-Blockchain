@@ -189,20 +189,14 @@ const Dashboard = () => {
 
         setAddress(add);
 
-        const myPass = localStorage.getItem(add);
-        if (myPass == null) {
-          navigate('/')
+        const loggedStatus = await contract.getAuthStatus(add);
+        if (loggedStatus == false) {
+          navigate('/');
         }
         else {
-          const loggedStatus = await contract.getLoggedInStatus(add, myPass);
-          if (loggedStatus == false) {
-            navigate('/');
-          }
-          else {
-            setAuthStatus(loggedStatus);
-          }
-          console.log('Auth Status - ', loggedStatus);
+          setAuthStatus(loggedStatus);
         }
+        console.log('Auth Status - ', loggedStatus);
       }
     } catch (err) {
       console.log(err);

@@ -16,7 +16,7 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
     name: "",
     description: "",
     algorithm: "General",
-    electionType: true
+    electionType: true,
   });
   const [se, setSe] = useState({
     startTime: parseInt(Date.now() / 1000),
@@ -31,32 +31,32 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
     });
   };
   const handleTypeChange = (e) => {
-    console.log('type', e.target.value);
-    if (e.target.value === 'Borda') {
+    console.log("type", e.target.value);
+    if (e.target.value === "Borda") {
       setBallotType(4);
       setResultCalculator(4);
     }
-    if (e.target.value === 'General') {
+    if (e.target.value === "General") {
       setBallotType(1);
       setResultCalculator(1);
     }
-    if (e.target.value === 'Oklahoma') {
+    if (e.target.value === "Oklahoma") {
       setBallotType(2);
       setResultCalculator(1);
-    }
-    else if (e.target.value === 'Schulze') {
+    } else if (e.target.value === "Schulze") {
       setBallotType(5);
       setResultCalculator(4);
-    }
-    else if (e.target.value === 'Instant Run-Off') {
+    } else if (e.target.value === "Instant Run-Off") {
       setBallotType(6);
       setResultCalculator(4);
-    }
-    else if (e.target.value === 'Kemeng Young') {
+    } else if (e.target.value === "Kemeng Young") {
       setBallotType(7);
+    } else if (e.target.value === "Ranked") {
+      setBallotType(8);
+      setResultCalculator(8);
     }
-    console.log('type', ballotType);
-    console.log('type', resultCalculator);
+    console.log("type", ballotType);
+    console.log("type", resultCalculator);
   };
 
   const handleSeChange = (e, type) => {
@@ -83,21 +83,29 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
         ["electionType"]: true,
       });
     }
-  }
+  };
 
   const validateDetail = () => {
     const { name, description } = nda;
     const { startTime, endTime } = se;
     const currTime = Date.now() / 1000;
-    return (name.length && description.length && currTime < startTime && startTime < endTime);
-  }
+    return (
+      name.length &&
+      description.length &&
+      currTime < startTime &&
+      startTime < endTime
+    );
+  };
 
   const handleSubmitNewElection = async (e) => {
     e.preventDefault();
-    let id
+    let id;
     try {
       if (validateDetail()) {
-        id = toast.loading("Processing Your Transaction", { theme: "dark", position: "top-center" })
+        id = toast.loading("Processing Your Transaction", {
+          theme: "dark",
+          position: "top-center",
+        });
         const { ethereum } = window;
 
         if (ethereum) {
@@ -112,8 +120,16 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
 
           //function to deploy ballot,result
           const transaction = await contract.createElection(
-            [1, nda.name, nda.description, se.startTime, se.endTime, nda.electionType],
-            ballotType, resultCalculator
+            [
+              1,
+              nda.name,
+              nda.description,
+              se.startTime,
+              se.endTime,
+              nda.electionType,
+            ],
+            ballotType,
+            resultCalculator
           );
           await transaction.wait().then(() => {
             console.log("suceessss", [
@@ -126,16 +142,20 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
               resultCalculator,
             ]);
           });
-          successtoast(id, "Election Created Successfully")
+          successtoast(id, "Election Created Successfully");
           closeModal();
           fetchElections();
         }
-      }
-      else {
+      } else {
         if (nda.name.length === 0) alert("Name should not be empty");
-        if (nda.description.length === 0) alert("Description should not be empty");
-        if (se.startTime <= Date.now() / 1000) alert("Start Time error - Election must start in future");
-        if (se.startTime >= se.startTime) alert("End Time error - Election finish time must comes after the start time");
+        if (nda.description.length === 0)
+          alert("Description should not be empty");
+        if (se.startTime <= Date.now() / 1000)
+          alert("Start Time error - Election must start in future");
+        if (se.startTime >= se.startTime)
+          alert(
+            "End Time error - Election finish time must comes after the start time"
+          );
       }
     } catch (err) {
       dangertoast(id, "Election Creation Failed");
@@ -226,11 +246,14 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
                   <option value="Schulze">Schulze</option>
                   <option value="Instant Run-off">Instant Run-Off</option>
                   <option value="Kemeng Young">Kemeng Young</option>
+                  <option value="Ranked">Ranked</option>
                 </select>
               </div>
               <br />
               <div>
-                <label className="labels UP_labels">Select Open/Invite Election Type</label>
+                <label className="labels UP_labels">
+                  Select Open/Invite Election Type
+                </label>
                 <select
                   onChange={(e) => handleElectionTypeChange(e)}
                   type="text"
@@ -238,10 +261,13 @@ export function CreateElectionModal({ DashContractAddress, fetchElections }) {
                   className="form-control"
                   placeholder="select branch"
                 >
-                  <option value="Invite Based Election">Invite Based Election</option>
-                  <option value="Open Based Election" selected>Open Based Election</option>
+                  <option value="Invite Based Election">
+                    Invite Based Election
+                  </option>
+                  <option value="Open Based Election" selected>
+                    Open Based Election
+                  </option>
                 </select>
-
               </div>
               <br />
 

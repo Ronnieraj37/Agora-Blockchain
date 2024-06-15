@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import "../libraries/LibDiamond.sol";
-import "./GetBallot.sol";
 import "./votingApp/ballot/Ballot.sol";
 import "./GetResultCalculator.sol";
 import "./votingApp/resultCalculator/ResultCalculator.sol";
 import "./ElectionFactory.sol";
 
 contract Test1Facet {
-    function setReqBallot() external {
-        GetBallot(LibDiamond.addressStorage().diamond).getNewBallot(2);
-    }
-
     function getReqBallot() external view returns (Ballot) {
         return LibDiamond.electionStorage().ballot;
     }
