@@ -2,9 +2,11 @@ name: Create preview environment
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - '**'
   push:
-    branches: [main]
+    branches:
+      - main
 
 concurrency:
   group: codepreview
