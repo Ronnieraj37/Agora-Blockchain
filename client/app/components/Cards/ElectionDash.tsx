@@ -2,19 +2,10 @@
 import React, { useState } from "react";
 import Loader from "../Helper/Loader";
 import ElectionMini from "../Cards/ElectionMini";
-import { useReadContract } from "wagmi";
-import { ELECTION_FACTORY_ADDRESS } from "../../constants";
-import { ElectionFactory } from "../../../abi/artifacts/ElectionFactory";
 import ElectionInfoCard from "./ElectionInfoCard";
-import { sepolia } from "viem/chains";
+import { useOpenElection } from "../Hooks/GetOpenElections";
 const ElectionDash = () => {
-  const { data: elections, isLoading } = useReadContract({
-    chainId: sepolia.id,
-    abi: ElectionFactory,
-    address: ELECTION_FACTORY_ADDRESS,
-    functionName: "getOpenElections",
-  });
-
+  const { elections, isLoading } = useOpenElection();
   const [electionStatuses, setElectionStatuses] = useState<{
     [key: string]: number;
   }>({});
